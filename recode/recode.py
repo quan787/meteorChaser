@@ -1,7 +1,8 @@
-import os,time,sys,pymysql
+import os,time,sys,pymysql,shutil
 
 def recode(a):
 	global folder,dest
+	shutil.copy(folder+a.replace('.avi','P.jpg'),dest+a.replace('.avi','.jpg'))
 	os.chdir(dest)
 	cmd="ffmpeg -i "+ folder+a+" -vcodec h264 -an -vb 2000k -y "+a.replace('avi','mp4')
 	print cmd
@@ -11,7 +12,7 @@ def sqllog(a):
 	global date
 	conn=pymysql.connect(host='127.0.0.1',port=3306,user='meteor',passwd='bnuastro',db='meteorchaser')
 	cur=conn.cursor()
-	cur.execute("INSERT INTO rawdata (date,name) VALUES(\'"+date+"\',\'"+a[:-4]+"\')")
+	cur.execute("INSERT INTO rawdata (date,name,type) VALUES(\'"+date+"\',\'"+a[:-4]+"\',0)")
 	conn.commit()
 	cur.close()
 	conn.close()
