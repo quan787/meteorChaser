@@ -1,65 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
- 	<meta charset="utf-8">
- 	<title>流星证认</title>
+	<title>流星监测</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body,html{
+		margin:0px;
+		height:100%;
+		padding:0px;
+		min-width:700px;
+	}
+	div#container{margin:0px;padding:0px;height:100%;min-width:700px;}
+	div#header {background-color:#99bbbb;height:7%;min-height:40px;width:100%;}
+	div#menu {background-color:#ffff99;height:90%;min-height:400px;width:15%;min-width:100px;float:left;}
+	div#content {background-color:#EEEEEE;height:90%;min-height:400px;width:85%;min-width:500px;float:left;}
+	div#footer {background-color:#99bbbb;height:3%;min-height:20px;clear:both;text-align:center;}
+	h1 {margin-bottom:0;display : inline}
+	h2 {margin-bottom:0;font-size:18px;}
+	ul {margin:0;}
+	li {list-style:none;}
+	</style>
 </head>
+
 <body>
-	<h1>流星证认页面</h1>
-	<table border="0" ><tr><td width="500px">
-		输入日期：
-		<input type="text" placeholder="" id="date">
-		<button onclick="load();" type="button">检索</button>
-	</td><td>
-		<input type="radio" name="cat" value="0" /> 未分类
-		<input type="radio" name="cat" value="1" /> 流星
-		<input type="radio" name="cat" value="2" /> 人卫
-		<input type="radio" name="cat" value="3" /> 飞机
-		<input type="radio" name="cat" value="4" /> 人为触发
-		<input type="radio" name="cat" value="5" /> 误触发
-		<button onclick="load();" type="button">分类</button>
-	</td></tr><tr height="600px"><td>
-		<p id="content"></p>
-	</td><td>
-		<video id="video1" width="720" height="576px" style="margin-top:15px;" src="" controls="controls">
-	    	Your browser does not support HTML5 video.
-	 	</video>
-	</td></tr></table>
+	<div id="container">
+
+		<div id="header">
+			<div style="float:left;"><h1>流星监测管理系统</h1></div>
+			<div style="float:right;">登陆</div>
+		</div>
+
+		<div id="menu">
+			<h2>功能菜单</h2>
+			<ul>
+				<li onclick="document.getElementById('frame').src='intro.html';">装置简介</li>
+				<li onclick="document.getElementById('frame').src='now.html';">实时概况</li>
+				<li onclick="document.getElementById('frame').src='stat.html';">数据统计</li>
+				<li onclick="document.getElementById('frame').src='videoview.html';">查询</li>
+				
+			</ul>
+		</div>
+
+		<div id="content">
+			<iframe src="intro.html" width="100%" height="100%" frameborder="0" id="frame"></iframe>
+		</div>
+
+		<div id="footer">Copyright 李镇业 来自<a href="http://bnuastro.club">北师天文社</a></div>
+
+	</div>
+
 </body>
-<script type="text/javascript"src="js/ajaxfunc.js"></script>
-<script type="text/javascript">
-	var currentname='';
-	function load(){
-		var creatajax=GetXmlHttpObject();
-		creatajax.onreadystatechange=function(){
-			if (creatajax.readyState==4 || creatajax.readyState=="complete"){ 
-				document.getElementById("content").innerHTML=structure(creatajax.responseText);
-			} 
-		}
-		input=document.getElementById("date").value;
-		creatajax.open("GET","ajax/daily.php?date="+input,true);
-		creatajax.send();
-	}
-	function structure(co){
-		eval('ac='+co+';');
-		var type=new Array("未分类","流星","人卫","飞机","人为触发","误触发");
-		cont='<table border="1"><tr>';
-		for(i=1;i<ac.count+1;i++){
-			if((i-1)%3==0) cont+='</tr><tr>';
-			if(ac.type[i-1]==null) ac.type[i-1]=0;
-			cont+='<td>';
-			cont+='<img src="'+ac.picurl[i-1]+'" width="150" onclick="playvideo(\''+ac.vidurl[i-1]+'\',\''+ac.name[i-1]+'\');"><br />';
-			cont+=ac.name[i-1];
-			cont+="<br/>"+type[ac.type[i-1]];
-			cont+='</td>';
-		}
-		cont+='</tr></table>';
-		return cont;
-	}
-	function playvideo(url,name){
-		var myVideo=document.getElementById("video1");
-		myVideo.src=url;
-		myVideo.play(); 
-		currentname=name;
-	}
-</script>
+</html>
