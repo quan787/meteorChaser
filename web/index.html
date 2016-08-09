@@ -26,18 +26,24 @@
 	<div id="container">
 
 		<div id="header">
-			<div style="float:left;"><h1>流星监测管理系统</h1></div>
+			<div style="float:left;"><h1 onclick="document.getElementById('frame').src='intro.html';">流星监测管理系统</h1></div>
 			<div style="float:right;">登陆</div>
 		</div>
 
 		<div id="menu">
-			<h2>功能菜单</h2>
+			<h2>简介</h2>
 			<ul>
-				<li onclick="document.getElementById('frame').src='intro.html';">装置简介</li>
+				<li onclick="document.getElementById('frame').src='detail.html';">装置简介</li>
+			</ul>
+			<h2>功能</h2>
+			<ul>
 				<li onclick="document.getElementById('frame').src='now.html';">实时概况</li>
 				<li onclick="document.getElementById('frame').src='stat.html';">数据统计</li>
-				<li onclick="document.getElementById('frame').src='videoview.html';">查询</li>
-				
+			</ul>
+			<h2>数据</h2>
+			<ul>
+				<li onclick="document.getElementById('frame').src='videoview.html';">按日期查询</li>
+				<li onclick="document.getElementById('frame').src='file/';">文件目录</li>
 			</ul>
 		</div>
 

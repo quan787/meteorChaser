@@ -2,10 +2,77 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<style type="text/css">
+ 	table{
+ 		empty-cells:hide;
+ 		border-collapse:collapse;
+ 		width:720px;
+ 		table-layout:fixed;
+ 	}
+ 	td{
+ 		vertical-align:top;
+ 		text-align:center;
+ 	}
+	</style>
 </head>
 <body>
+	<h2>运行状态 <button onclick='load()' type="button">刷新</button></h2>
+	<table border="1"><tr>
+		<td>已探测到</td>
+		<td>云量</td>
+		<td>温度</td>
+		<td>湿度</td>
+		<td>PM2.5</td>
+		<td>天气状态</td>
+	</tr>
+	<tr>
+		<td id='n'>未知</td>
+		<td id='c'>未知</td>
+		<td id='t'>未知</td>
+		<td id='h'>未知</td>
+		<td id='p'>未知</td>
+		<td id='s'>未知</td>
+	</tr>
+	</table>
+	
+	<!--p id='content'>加载中</p-->
 	<h2>实时图像</h2>
-	<img src="pic/realtime.jpg" />
+	<img src="file/realtime.jpg" />
 	<h2>天气预报</h2>
-	<img src="http://202.127.24.18/v4/bin/astro.php?lon=116.361&lat=36.959&lang=zh-CN&ac=0&unit=metric&tzshift=0" />
+	<img src="http://202.127.24.18/v4/bin/astro.php?lon=116.36077&lat=39.95861&lang=zh-CN&ac=0&unit=metric&tzshift=0" />
 </body>
+<script type="text/javascript"src="js/ajaxfunc.js"></script>
+<script type="text/javascript">
+	function load(){
+		var creatajax=GetXmlHttpObject();
+		creatajax.onreadystatechange=function(){
+			if (creatajax.readyState==4 || creatajax.readyState=="complete"){ 
+				structure(creatajax.responseText);
+			} 
+		}
+		creatajax.open("GET","ajax/now.php",true);
+		creatajax.send();
+	}
+	function structure(co){
+		eval('ac='+co+';');
+		var dic = new Array();
+		dic["CLEAR_DAY"] = "晴天";
+		dic["CLEAR_NIGHT"] = "晴夜";
+		dic["PARTLY_CLOUDY_DAY"] = "多云";
+		dic["PARTLY_CLOUDY_NIGHT"] = "多云";
+		dic["CLOUDY"] = "阴";
+		dic["RAIN"] = " 雨";
+		dic["SLEET"] = "冻雨";
+		dic["SNOW"] = "雪";
+		dic["WIND"] = "风";
+		dic["FOG"] = "雾";
+		dic["HAZE"] = "霾";
+		document.getElementById("n").innerHTML=ac.count;
+		document.getElementById("c").innerHTML=ac.cloudrate*100+'%';
+		document.getElementById("t").innerHTML=ac.temperature;
+		document.getElementById("h").innerHTML=ac.humidity*100+'%';
+		document.getElementById("p").innerHTML=ac.pm25;
+		document.getElementById("s").innerHTML=dic[ac.skycon];
+	}
+	load();
+</script>
