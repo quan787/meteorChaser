@@ -2,7 +2,223 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<script src="js/echarts.min.js"></script>
+	<script type="text/javascript"src="js/ajaxfunc.js"></script>
 </head>
 <body>
-	建设中
+	<div id="main" style="width:720px;height:500px;">数据加载中</div>
 </body>
+<script type="text/javascript">
+function optionset(){
+	data=new Array();
+	data[0]=new Array();
+	data[1]=new Array();
+	for(i=0;i<ac.meteor.length;i++){
+		data[0][i]=new Array();
+		data[0][i][0]=ac.time[i].replace(' ', '\n');
+		data[0][i][1]=0.5;
+		data[0][i][2]=ac.detect[i];
+		data[1][i]=new Array();
+		data[1][i][0]=ac.time[i].replace(' ', '\n');
+		data[1][i][1]=0.5;
+		data[1][i][2]=ac.meteor[i];
+	}
+	begin=ac.time.reverse()[0].replace(' ', '\n');
+	end=ac.time[35].replace(' ', '\n');
+	ac.time.reverse();
+	period=new Array();
+	for(i=0;i<ac.period.length;i++){
+		period[i]=[{xAxis: 'a'}, {xAxis: ''}];
+		period[i][0].xAxis=ac.period[i][0].replace(' ', '\n');
+		period[i][1].xAxis=ac.period[i][1].replace(' ', '\n');
+	}
+	option = {
+		title : {
+			text: '天气-探测数总图',
+			subtext: '深色区域为探测时段',
+			x: 'center',
+			align: 'right'
+		},
+		grid: {
+			bottom: 80
+		},
+		toolbox: {
+			feature: {
+				dataZoom: {
+					yAxisIndex: 'none'
+				},
+				restore: {},
+				saveAsImage: {}
+			}
+		},
+		tooltip : {
+			trigger: 'axis',
+			axisPointer: {
+				animation: false
+			},
+			formatter: '{b2}<br/>{a2}: {c2}<br />{a3}: {c3}'
+		},
+		legend: {
+			data:['探测数','云量','pm2.5'],
+			x: 'left'
+		},
+		dataZoom: [
+		{
+			show: true,
+			realtime: true,
+			startValue: begin,
+			endValue: end,
+		},
+		{
+			type: 'inside',
+			realtime: true,
+			startValue : begin,
+			endValue: end,
+		}
+		],
+		xAxis: {
+			type : 'category',
+			splitLine: {
+				lineStyle: {
+					type: 'dashed'
+				}
+			},
+			data : ac.time.map(function (str) {
+				return str.replace(' ', '\n')
+			})
+
+		},
+		yAxis: [{
+			splitLine: {
+				lineStyle: {
+					type: 'dashed'
+				}
+			},
+			max:1,
+			inverse: true,
+			position: 'left',
+
+		},
+		{
+			splitLine: {
+				lineStyle: {
+					type: 'dashed'
+				}
+			},
+			max:1,
+			inverse: true,
+			position: 'left'
+		},{
+			name: '云量',
+			nameLocation: 'start',
+			type: 'value',
+			max: 1,
+			inverse: true,
+			position: 'left'
+		},
+		{
+			name: 'pm2.5',
+			nameLocation: 'end',
+			max: 200,
+			type: 'value',
+
+		}],
+		series: [{
+			name: '探测数',
+			data: data[0],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2])*20;
+			},
+			label: {
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return '探测:'+param.data[2];
+					},
+					position: 'top',
+					textStyle:{
+						fontSize:15,
+						fontWeight:'bold'
+					}
+				}
+			},
+			animation: false
+		},
+		{
+			name: '流星数',
+			data: data[1],
+			type: 'scatter',
+			symbolSize: function (data) {
+				return Math.sqrt(data[2])*20;
+			},
+			label: {
+				emphasis: {
+					show: true,
+					formatter: function (param) {
+						return '流星:'+param.data[2];
+					},
+					position: 'bottom',
+					textStyle:{
+						fontSize:15,
+						fontWeight:'bold'
+					}
+				}
+			},
+			animation: false
+		},
+		{
+			name:'云量',
+			yAxisIndex:1,
+			type:'line',
+			animation: false,
+			areaStyle: {
+				normal: {}
+			},
+			lineStyle: {
+				normal: {
+					width: 1
+				}
+			},
+			markArea: {
+				silent: true,
+				data: period
+			},
+			data:ac.cloudrate,
+		},
+
+		{
+			name:'pm2.5',
+			yAxisIndex:3,
+			type:'line',
+
+			animation: false,
+			areaStyle: {
+				normal: {}
+			},
+			lineStyle: {
+				normal: {
+					width: 1
+				}
+			},
+			data:ac.pm25,	           
+
+		},]
+	};
+
+}
+function load(){
+	var creatajax=GetXmlHttpObject();
+	creatajax.onreadystatechange=function(){
+		if (creatajax.readyState==4 || creatajax.readyState=="complete"){ 
+			eval('ac='+creatajax.responseText+';');
+			optionset();
+			var myChart = echarts.init(document.getElementById('main'));
+			myChart.setOption(option);
+		} 
+	}
+	creatajax.open("GET","ajax/hourlystat.php",true);
+	creatajax.send();
+	}
+load();
+</script>

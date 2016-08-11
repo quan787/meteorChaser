@@ -11,12 +11,7 @@ foreach ($filesnames as $name) {
 }
 $query=sprintf('SELECT temperature,humidity,pm25,skycon,cloudrate FROM weather WHERE hour="%s"',date('YmdH',time()));
 $result = mysql_query($query,$GLOBALS['db']);
-$row=mysql_fetch_array($result);
-unset($row[0]);
-unset($row[1]);
-unset($row[2]);
-unset($row[3]);
-unset($row[4]);
+$row=mysql_fetch_array($result,MYSQL_ASSOC);
 $row['count']=$c;
 echo json_encode($row,JSON_UNESCAPED_SLASHES);
 ?>

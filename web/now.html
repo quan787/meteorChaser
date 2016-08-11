@@ -68,9 +68,9 @@
 		dic["FOG"] = "雾";
 		dic["HAZE"] = "霾";
 		document.getElementById("n").innerHTML=ac.count;
-		document.getElementById("c").innerHTML=ac.cloudrate*100+'%';
+		document.getElementById("c").innerHTML=Math.round(ac.cloudrate*100)+'%';
 		document.getElementById("t").innerHTML=ac.temperature;
-		document.getElementById("h").innerHTML=ac.humidity*100+'%';
+		document.getElementById("h").innerHTML=Math.round(ac.humidity*100)+'%';
 		document.getElementById("p").innerHTML=ac.pm25;
 		document.getElementById("s").innerHTML=dic[ac.skycon];
 	}

@@ -20,6 +20,8 @@ def move_recode():
     allavi=get_recursive_file_list("C:\\meteor\\2016")
     for fullname in allavi:
         copyname=fullname.replace('C','D')
+        if not os.path.exists(copyname[0:30]):
+            os.mkdirs(copyname[0:30])
         win32file.CopyFileW(fullname,copyname,0)
         destfile='D:\\meteor\\recoded\\'+fullname[22:-4]+'.mp4'
         if not os.path.exists(destfile[0:26]):
@@ -54,7 +56,7 @@ def sqllog(date,name):
     conn.close()
 
 def logweather():
-    f=urllib.urlopen("https://api.caiyunapp.com/v2/TAkhjf8d1nlSlspN/116.3608,39.9586/realtime.json")
+    f=urllib.urlopen("https://api.caiyunapp.com/v2/cAP9tPF0hIcuTofj/116.3608,39.9586/realtime.json")
     s=f.read()
     arr=json.loads(s)
     hour=time.strftime("%Y%m%d%H")
