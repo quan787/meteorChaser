@@ -16,10 +16,11 @@
 <body>
 	
 	<table border="0" ><tr><td width="500px">
-		输入日期：
+		日期：
 		<input type="text" placeholder="" id="date">
 		<button onclick="load();" type="button">检索</button>
 	</td><td>
+		<button onclick="alter();" type="button">切换照片/视频</button>
 		<input type="radio" name="cat" value="0" /> 未分类
 		<input type="radio" name="cat" value="1" /> 流星
 		<input type="radio" name="cat" value="2" /> 人卫
@@ -29,7 +30,7 @@
 		<button onclick="classify();" type="button">分类</button>
 	</td></tr><tr height="580px"><td>
 		<p id="content"></p>
-	</td><td vertical-align="bottom">
+	</td><td vertical-align="bottom" id='container'>
 		<video id="video1" width="720" height="576px" style="margin-top:15px;" src="" controls="controls">
 	    	Your browser does not support HTML5 video.
 	 	</video>
@@ -55,7 +56,7 @@
 		for(i=1;i<ac.count+1;i++){
 			cont+='<tr>';
 			//if(ac.type[i-1]==null) ac.type[i-1]=0;
-			cont+='<td onclick="playvideo(\''+ac.vidurl[i-1]+'\',\''+ac.name[i-1]+'\');">';
+			cont+='<td onclick="play(\''+ac.vidurl[i-1]+'\',\''+ac.picurl[i-1]+'\',\''+ac.name[i-1]+'\');">';
 			//cont+='<img src="'+ac.picurl[i-1]+'" width="100" onclick="playvideo(\''+ac.vidurl[i-1]+'\',\''+ac.name[i-1]+'\');"><br />';
 			cont+=ac.name[i-1];
 			cont+="</td><td>"+type[ac.type[i-1]];
@@ -64,10 +65,15 @@
 		cont+='</table>';
 		return cont;
 	}
-	function playvideo(url,name){
-		var myVideo=document.getElementById("video1");
-		myVideo.src=url;
-		myVideo.play(); 
+	function play(vidurl,picurl,name){
+		if(source=='vid'){
+			var myVideo=document.getElementById("video1");
+			myVideo.src=vidurl;
+			myVideo.play(); 
+		}
+		if(source=='pic'){
+			document.getElementById("pic1").src=picurl;
+		}
 		currentname=name;
 	}
 	function classify(){
@@ -88,7 +94,18 @@
 		creatajax.open("GET","ajax/classify.php"+payload,true);
 		creatajax.send();
 	}
+	function alter(){
+		if(source=='vid'){
+			document.getElementById("container").innerHTML='<img src="" id="pic1" width="720" height="576px" style="margin-top:15px;"/>';
+			source='pic';
+		}
+		else if(source=='pic'){
+			document.getElementById("container").innerHTML='<video id="video1" width="720" height="576px" style="margin-top:15px;" src="" controls="controls">Your browser does not support HTML5 video.</video>';
+	 		source='vid';
+		}
+	}
 	var currentname='';
 	document.getElementById("date").value=GetStrDate();
+	var source='vid';
 	load();
 </script>
