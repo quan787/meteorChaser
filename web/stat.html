@@ -24,7 +24,7 @@ function optionset(){
 		data[1][i][2]=ac.meteor[i];
 	}
 	begin=ac.time.reverse()[0].replace(' ', '\n');
-	end=ac.time[35].replace(' ', '\n');
+	end=ac.time[Math.min(71,ac.time.length-1)].replace(' ', '\n');
 	ac.time.reverse();
 	period=new Array();
 	for(i=0;i<ac.period.length;i++){
