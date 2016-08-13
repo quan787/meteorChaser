@@ -6,6 +6,7 @@
 ## 依赖软件
 *	wamp
 *	python2.7
+*	ffmpeg
 *	(python模块)VideoCapture
 *	(python模块)pywin32
 *	(python模块)pymysql
@@ -36,9 +37,10 @@
 *		请按照UFPAnalyzer软件数据文件进行导入
 
 ## 文件系统
-UFOCapture文件存储目录：C:\meteor\
-永久存储目录：D:\meteor\
-转码视频目录：D:\meteor\recoded\
+
+*	UFOCapture文件存储目录：C:\meteor\
+*	永久存储目录：D:\meteor\
+*	转码视频目录：D:\meteor\recoded\
 
 ## 简介
 

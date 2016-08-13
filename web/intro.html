@@ -6,17 +6,32 @@
 <body>
 <h1>meteorChaser</h1>
 
-<p>meteor.bnuastro.club 流星监控数据的存储和管理
+<p><a href="http://meteor.bnuastro.club/">meteor.bnuastro.club</a> 流星监控数据的存储和管理
 欢迎加入我们</p>
 
-<h2>装置简介</h2>
+<h2>依赖软件</h2>
+<ul><li>wamp</li><li>python2.7</li><li>ffmpeg</li><li>(python模块)VideoCapture</li><li>(python模块)pywin32</li><li>(python模块)pymysql</li><li>(js插件)Echarts</li></ul>
 
+<h2>数据库结构</h2>
+<p>数据库名：meteorchaser
+表：webmeteor</p>
+<ul><li>id int(11) a_i</li><li>date varchar(10)</li><li>name varchar(40)</li><li>type int(8)</li></ul>
+<p>表：weather</p>
+<ul><li>hour varchar(10)</li><li>temperature float</li><li>skycon varchar(20)</li><li>cloudrate float</li><li>aqi float</li><li>humidity float</li><li>pm25 float</li><li>intensity float</li></ul>
+<p>表：rawdata</p>
+<ul><li>请按照UFPAnalyzer软件数据文件进行导入</li></ul>
+
+<h2>文件系统</h2>
+<ul><li>UFOCapture文件存储目录：C:\meteor\</li><li>永久存储目录：D:\meteor\</li><li>转码视频目录：D:\meteor\recoded\</li></ul>
+
+<h2>简介</h2>
 <p>本系统使用高灵敏度的CCD监控摄像头，配合UFOCapture软件进行流星监测。</p>
-<p>文件存储地址：<a href="http://meteor.bnuastro.club/file/">meteor.bnuastro.club/file</a></p>
-<p>gihub链接：<a href="https://github.com/quan787/meteorChaser" target="_black">meteorChaser</a></p>
-<h2>目标功能</h2>
+<p>装置介绍：<a href="http://meteor.bnuastro.club/detail.html">meteor.bnuastro.club/detail.html</a></p>
+<p>文件存储地址：<a href="http://meteor.bnuastro.club/file/">meteor.bnuastro.club/file/</a></p>
+<p>gihub链接：<a href="https://github.com/quan787/meteorChaser">meteorChaser</a></p>
 
-<ul><li>定时对新的视频文件进行转码，以适合网络播放</li><li>流星图片和视频的在线展示，进行证认和分类</li><li>建立流星数据库</li><li>对热门的流星可以提交评论、目击报告等。</li></ul>
+<h2>目标功能</h2>
+<ul><li>定时对新的视频文件进行转码，以适合网络播放（已完成）</li><li>流星图片和视频的在线展示，进行证认和分类（已完成）</li><li>建立流星数据库（已完成）</li><li>观测数据统计图（已完成）</li><li>对热门的流星可以提交评论、目击报告等。（待填）
 <img alt="装置图片" src="http://meteor.bnuastro.club/pic/IMG_1484.JPG"/>
-<img alt="流星" src="http://meteor.bnuastro.club/pic/meteor1.gif"/>
+<img alt="流星" src="http://meteor.bnuastro.club/pic/meteor1.gif"/></li></ul>
 </body>
