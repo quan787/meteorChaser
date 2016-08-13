@@ -34,7 +34,7 @@
 
 表：rawdata
 
-*		请按照UFPAnalyzer软件数据文件进行导入
+*		请按照UFOAnalyzer软件数据文件进行导入
 
 ## 文件系统
 
