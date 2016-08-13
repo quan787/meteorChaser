@@ -11,7 +11,10 @@ def get_recursive_file_list(path):
         if file_name[-4:]=='.avi' and file_name[0]=='M':
             all_files.append(full_file_name)
         if file_name[-4:]=='.csv':
-            win32file.CopyFileW(full_file_name,full_file_name.replace('C','D'),0)
+            copyname=full_file_name.replace('C','D')
+            if not os.path.exists(copyname[0:21]):
+                os.mkdir(copyname[0:21])
+            win32file.CopyFileW(full_file_name,copyname,0)
         if os.path.isdir(full_file_name):
             next_level_files = get_recursive_file_list(full_file_name)
             all_files.extend(next_level_files)
@@ -21,7 +24,7 @@ def move_recode():
     for fullname in allavi:
         copyname=fullname.replace('C','D')
         if not os.path.exists(copyname[0:30]):
-            os.mkdirs(copyname[0:30])
+            os.mkdir(copyname[0:30])
         win32file.CopyFileW(fullname,copyname,0)
         destfile='D:\\meteor\\recoded\\'+fullname[22:-4]+'.mp4'
         if not os.path.exists(destfile[0:26]):
@@ -75,6 +78,7 @@ def logweather():
     conn.close()
 
 def main():
+    move_recode()
     print "Please Keep Running This Thing"
     lat=40.0
     lon=116.4
