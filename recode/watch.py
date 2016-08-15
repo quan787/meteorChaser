@@ -47,7 +47,7 @@ def move_recode():
         win32file.DeleteFile(fullname[0:-4]+'T.jpg')
         sqllog(fullname[22:30],fullname[31:-4])
 def calsr(days,lat,lon,timezone):
-    sr=24*(180+timezone*15-lon-math.degrees(math.acos(-math.tan(math.radians(-23.4*math.cos(360*(days+9)/365)))*math.tan(math.radians(lat)))))/360
+    sr=24*(180+timezone*15-lon-math.degrees(math.acos(-math.tan(math.radians(-23.4*math.cos(2*math.pi*(days+9)/365)))*math.tan(math.radians(lat)))))/360
     ss=24*(1+(timezone*15-lon)/180)-sr
     return (sr,ss)
 def sqllog(date,name):
