@@ -1,78 +1,332 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<style type="text/css">
- 	table{
- 		empty-cells:hide;
- 		border-collapse:collapse;
- 		width:720px;
- 		table-layout:fixed;
- 	}
- 	td{
- 		vertical-align:top;
- 		text-align:center;
- 	}
-	</style>
-</head>
-<body>
-	<h2>运行状态 <button onclick='load()' type="button">刷新</button></h2>
-	<table border="1"><tr>
-		<td>已探测到</td>
-		<td>云量</td>
-		<td>温度</td>
-		<td>湿度</td>
-		<td>PM2.5</td>
-		<td>天气状态</td>
-	</tr>
-	<tr>
-		<td id='n'>未知</td>
-		<td id='c'>未知</td>
-		<td id='t'>未知</td>
-		<td id='h'>未知</td>
-		<td id='p'>未知</td>
-		<td id='s'>未知</td>
-	</tr>
-	</table>
-	
-	<!--p id='content'>加载中</p-->
-	<h2>实时图像</h2>
-	<img src="file/realtime.jpg" />
-	<h2>天气预报</h2>
-	<img src="http://202.127.24.18/v4/bin/astro.php?lon=116.36077&lat=39.95861&lang=zh-CN&ac=0&unit=metric&tzshift=0" />
-</body>
-<script type="text/javascript"src="js/ajaxfunc.js"></script>
-<script type="text/javascript">
-	function load(){
-		var creatajax=GetXmlHttpObject();
-		creatajax.onreadystatechange=function(){
-			if (creatajax.readyState==4 || creatajax.readyState=="complete"){ 
-				structure(creatajax.responseText);
-			} 
-		}
-		creatajax.open("GET","ajax/now.php",true);
-		creatajax.send();
-	}
-	function structure(co){
-		eval('ac='+co+';');
-		var dic = new Array();
-		dic["CLEAR_DAY"] = "晴天";
-		dic["CLEAR_NIGHT"] = "晴夜";
-		dic["PARTLY_CLOUDY_DAY"] = "多云";
-		dic["PARTLY_CLOUDY_NIGHT"] = "多云";
-		dic["CLOUDY"] = "阴";
-		dic["RAIN"] = " 雨";
-		dic["SLEET"] = "冻雨";
-		dic["SNOW"] = "雪";
-		dic["WIND"] = "风";
-		dic["FOG"] = "雾";
-		dic["HAZE"] = "霾";
-		document.getElementById("n").innerHTML=ac.count;
-		document.getElementById("c").innerHTML=Math.round(ac.cloudrate*100)+'%';
-		document.getElementById("t").innerHTML=ac.temperature;
-		document.getElementById("h").innerHTML=Math.round(ac.humidity*100)+'%';
-		document.getElementById("p").innerHTML=ac.pm25;
-		document.getElementById("s").innerHTML=dic[ac.skycon];
-	}
-	load();
+	<title>meteorChaser</title>
+	<head>
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+  	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  	<!-- Bootstrap 3.3.5 -->
+  	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  	<!-- Font Awesome -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  	<!-- Ionicons -->
+  	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  	<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  	<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  	<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- iCheck -->
+  	<link rel="stylesheet" href="plugins/iCheck/flat/blue.css">
+  	<!-- Morris chart -->
+  	<link rel="stylesheet" href="plugins/morris/morris.css">
+  	<!-- jvectormap -->
+  	<link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+  	<!-- Date Picker -->
+  	<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+  	<!-- Daterange picker -->
+  	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  	<!-- bootstrap wysihtml5 - text editor -->
+  	<link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="dist/css/meteorChaser.css">
+
+<!-- jQuery 2.1.4 -->
+<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
 </script>
+<!-- Bootstrap 3.3.5 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparkline/jquery.sparkline.min.js"></script>
+<!-- jvectormap -->
+<script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/knob/jquery.knob.js"></script>
+<!-- daterangepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- datepicker -->
+<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- Slimscroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+</head>
+<body  class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+<!-- 顶部导航栏 -->
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>m</b>C</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>meteor</b>Chaser</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="dist/img/camera.jpg" class="user-image" alt="User Image">
+              <span class="hidden-xs">BNU</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="dist/img/camera.jpg" class="img-circle" alt="User Image">
+
+                <p>
+                  北京师范大学 - 普通站点
+
+                  <small>当前状态-运行正常</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="#" class="btn btn-default btn-flat">设置</a>
+                </div>
+                <div class="pull-right">
+                  <a href="#" class="btn btn-default btn-flat">退出</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="dist/img/camera.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>北京师范大学站点</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> 运行正常</a>
+        </div>
+      </div>
+
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">导航</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-fw fa-wikipedia-w"></i>
+             <span>介绍</span>
+              <i class="fa fa-angle-left pull-right"></i>
+          </a>  
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="index.html"><i class="fa fa-circle-o"></i> 
+            系统介绍</a></li>
+            <li><a href="detail.html"><i class="fa fa-circle-o"></i> 装置简介</a></li>
+          </ul>
+        </li>
+        <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>功能</span><i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="now.html"><i class="fa fa-circle-o"></i> 实时概况</a></li>
+            <li><a href="stat.html"><i class="fa fa-circle-o"></i> 数据统计</a></li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>数据</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="videoview.html"><i class="fa fa-circle-o"></i> 按日期查询</a></li>
+            <li><a href="file/"><i class="fa fa-circle-o"></i> 天文目录</a></li>
+          </ul>
+        </li>
+        
+        <li class="header">更多</li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>关于我们</span></a></li>
+      </ul>
+    </section>
+  </aside>
+  <div class="content-wrapper" >
+  <!-- 内容导航信息 -->
+    <section class="content-header">
+      <h1>
+        系统介绍
+        <small>System Intro</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 简介</a></li>
+      </ol>
+    </section>
+    <section class="content">
+    <div class="row">
+    <div class="col-md-5">
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="dist/img/camera.jpg" alt="User profile picture">
+
+              <h3 class="profile-username text-center">BNU</h3>
+
+              <p class="text-muted text-center">运行状态</p>
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>已探测数目</b> <a class="pull-right">4</a>
+                </li>
+                <li class="list-group-item">
+                  <b>云量</b> <a class="pull-right">100%</a>
+                </li>
+                <li class="list-group-item">
+                  <b>温度</b> <a class="pull-right">25</a>
+                </li>
+                  <li class="list-group-item">
+                  <b>湿度</b>
+                   <a class="pull-right">75%</a>
+                </li>
+                <li class="list-group-item">
+                  <b>PM2.5</b>
+                   <a class="pull-right">84</a>
+                </li>
+                <li class="list-group-item">
+                  <b>天气状态</b>
+                   <a class="pull-right">阴</a>
+                </li>
+              </ul>
+
+              <a href="#" class="btn btn-primary btn-block" ><b>刷新</b></a>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+          <div class="box box-widget">
+            <div class="box-header with-border">
+              <p>晴天钟</p>
+            </div>
+            <div class="box-body" align="center">
+                <img src="http://202.127.24.18/v4/bin/astro.php?lon=116.36077&amp;lat=39.95861&amp;lang=zh-CN&amp;ac=0&amp;unit=metric&amp;tzshift=0">
+            </div>
+          </div>
+
+    </div>
+    <div class="col-md-7">
+      <div class="box box-widget">
+        <div class="box-header with-border">
+              <div class="user-block">
+                <span class="username"><a href="#">实时图像</a></span>
+                <span class="description">刷新自10分钟之前</span>
+              </div>
+              <!-- /.user-block -->
+              <div class="box-tools">
+            
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+        <div class="box-body">
+        <div align="center">
+          <img src="file/realtime.jpg" alt="Photo" class="img-responsive pad">
+           <div class="row" margin="10dp">
+           <div class="col-md-4"></div>
+             <div class="col-md-4">
+             <a href="#" class="btn btn-primary btn-block" ><b>刷新</b></a>
+             </div>
+                        <div class="col-md-4"></div>
+
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script type="text/javascript" src="js/ajaxfunc.js"></script>
+<script type="text/javascript">
+  function load(){
+    var creatajax=GetXmlHttpObject();
+    creatajax.onreadystatechange=function(){
+      if (creatajax.readyState==4 || creatajax.readyState=="complete"){ 
+        structure(creatajax.responseText);
+      } 
+    }
+    creatajax.open("GET","ajax/now.php",true);
+    creatajax.send();
+  }
+  function structure(co){
+    eval('ac='+co+';');
+    var dic = new Array();
+    dic["CLEAR_DAY"] = "晴天";
+    dic["CLEAR_NIGHT"] = "晴夜";
+    dic["PARTLY_CLOUDY_DAY"] = "多云";
+    dic["PARTLY_CLOUDY_NIGHT"] = "多云";
+    dic["CLOUDY"] = "阴";
+    dic["RAIN"] = " 雨";
+    dic["SLEET"] = "冻雨";
+    dic["SNOW"] = "雪";
+    dic["WIND"] = "风";
+    dic["FOG"] = "雾";
+    dic["HAZE"] = "霾";
+    document.getElementById("n").innerHTML=ac.count;
+    document.getElementById("c").innerHTML=Math.round(ac.cloudrate*100)+'%';
+    document.getElementById("t").innerHTML=ac.temperature;
+    document.getElementById("h").innerHTML=Math.round(ac.humidity*100)+'%';
+    document.getElementById("p").innerHTML=ac.pm25;
+    document.getElementById("s").innerHTML=dic[ac.skycon];
+  }
+  load();
+</script>
+    </section>
+    <section>
+      
+    </section>
+  </div>
+    <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+    <strong>Copyright © 2015-2016 <a href="http://meteor.bnuastro.club/">北师天文社</a>.</strong> All rights
+    reserved.
+  </footer>
+</body>
+
+</html>

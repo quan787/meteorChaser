@@ -1,33 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-</head>
-<body>
-	<h2>流星观测</h2>
-	<p>对流星的研究有着很长的历史。由于流星是持续时间很短的暂现现象，在过去的几十年，缺少合适的探测器的情况下，流星观测一直以肉眼观测为主。国际流星组织（IMO）拟定了一套标准观测流程向全世界的天文爱好者推广，使得他们可以提交有科研价值的观测报告，曾是流星雨的研究重要资料来源。<br/>
-	随着科学技术的发展，观测流行的手段逐渐增多。早在照相底片时代，就有许多拍摄流星的尝试。在拍摄流星的相机上加装特殊的旋转快门，就可以在进行长曝光的同时得到流星的速度信息。使用物端棱镜，也可以获得流星的光谱以供研究。<br/>
-	由于流星在高层大气中留下的余迹可以反射无线电波，人们发展了雷达观测流星的方法。专业的流星雷达可以探测到远超肉眼可见数目的流星，同时在白天也可以观测。使用这种方式确定了许多在白天活动的流星群。<br/>
-	而近十几年，视频拍摄流星的方法逐渐流行起来。CCD的性能终于开始接近人眼，使用专门的低照度相机已经可以得到与肉眼相近的极限星等，并且可以以25帧每秒的速度进行拍摄。流星的视频可以承载最多的信息量。同时，这样的观测装置对于爱好者来说也非常容易搭建。日本和美国都有相当庞大的流星监测网。
-	</p>
-	<h2>装置</h2>
-	<p>本装置主要原理是以高灵敏度的CCD摄像头拍摄天空的动态视频，使用UFOCapture软件捕捉暂现现象，并自动将视频和图片存储下来。然后利用成套的软件对视频进行分析，甄别出流星，并可以自动得出群的归属。多站观测还可以对流星体进行定轨。<br/>
-	这套系统的核心在于高灵敏度的CCD相机。在流星监测中，需要极低照度的相机，也就是说相机必须足够灵敏，同时不能有过多的噪点。一款常用的相机是日本Watec的902H相机。目前这款相机已经停产，只能买到二手设备。不过升级版902H Ultimate仍在生产，但是价格比较昂贵。目前国内已经有相似的产品，经测试与旧版的902H性能相近，适合进行流星观测。<br/>
-	软件方面，本系统采用的是UFOCapture软件套装，其中包括三个软件，只能运行在windows上，分别用于流星的拍摄、分析和定轨。由于采用触发的方式，观测过程中产生的数据量较小，但有可能漏掉一些比较暗的流星。美国的流星监测网采用的是不同的方式。软件会记录所有拍摄到的数据，这样产生的数据量较大，后期处理比较麻烦。</p>
-	<p>	整套系统进行搭建时就十分注重自动化运行的功能。初期为了方便进行移动和安装，我选择小型的电脑棒驱动摄像头，并将电脑棒与摄像头一起放在监控防水壳里。这样只需要电源和无线网，流可以进行观测了。但同时，由于电脑棒存储较小，我又在室内安装了一个树莓派挂载移动硬盘作为数据服务器。<br/>
-	我获得天文系老师的允许将我的设备安装在教九楼顶进行长时间观测。</p>
-	<img src="pic/previousStructure.png" />
-	<p>这样整个系统比较复杂，但是传输使用WiFi信号，链接较为不稳定。同时文件难以做到实时同步。实际上大部分的数据处理都在电脑棒上进行，树莓派的作用较为有限。于是在设备安装一个月之后我进行了改装，将电脑棒移到室内，使用BNC线传输模拟信号进入室内。</p>
-	<img src="pic/afterStructure.png" />
-	<p>系统简化了许多。但是由于需要长距离传输模拟信号，可能引入额外的干扰。<br/>
-	同时，装置在运行时还遇到许多其他的问题。摄像头拍摄时会大量发热，而温度高时画面中会出现许多坏点，影响观测。于是我加装了两根热管用于将摄像头产生的热传递到铝壳上进行散热。另外，防水壳的密封性也要着重考虑。使用密封胶密封所有的缝隙，同时在铝壳内放置干燥剂防止结露。</p>
-	<img src="pic/heat.jpg" />
-	<img src="pic/water.jpg" />
-	<h2>观测结果</h2>
-	<p>由于夏季北京天气非常差，自设备正式安装以来只探测到一颗流星。但是在之前的测试中，在极好的天气情况下，摄像头可以在一晚上探测到5-10颗流星。</p>
-	<img src="pic/meteor1.gif" />
-	<p>从视频何以看出，摄像头可以拍摄到大量的恒星，极限星等约为3.5等，对红色的恒星更为敏感。期待北京天气转好，设备正常运行时，可以拍摄到更多的流星。<br/>
-	使用UFOAnalyzer分析得到的视频，使用恒星与星图对齐进行校准，软件就能得到流星的位置、方向、角速度等信息。最后的结果形成一个表格供存储和进一步分析之用。</p>
-	<img src="pic/table.png" />
+	<title>meteorChaser</title>
+	<head>
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+  	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  	<!-- Bootstrap 3.3.5 -->
+  	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  	<!-- Font Awesome -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  	<!-- Ionicons -->
+  	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  	<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  	<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  	<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- iCheck -->
+  	<link rel="stylesheet" href="plugins/iCheck/flat/blue.css">
+  	<!-- Morris chart -->
+  	<link rel="stylesheet" href="plugins/morris/morris.css">
+  	<!-- jvectormap -->
+  	<link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+  	<!-- Date Picker -->
+  	<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+  	<!-- Daterange picker -->
+  	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  	<!-- bootstrap wysihtml5 - text editor -->
+  	<link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="dist/css/meteorChaser.css">
 
+<!-- jQuery 2.1.4 -->
+<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.5 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparkline/jquery.sparkline.min.js"></script>
+<!-- jvectormap -->
+<script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/knob/jquery.knob.js"></script>
+<!-- daterangepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- datepicker -->
+<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- Slimscroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="dist/js/pages/dashboard.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+</head>
+<body  class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+<!-- 顶部导航栏 -->
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>m</b>C</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>meteor</b>Chaser</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="dist/img/camera.jpg" class="user-image" alt="User Image">
+              <span class="hidden-xs">BNU</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="dist/img/camera.jpg" class="img-circle" alt="User Image">
+
+                <p>
+                  北京师范大学 - 普通站点
+
+                  <small>当前状态-运行正常</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="#" class="btn btn-default btn-flat">设置</a>
+                </div>
+                <div class="pull-right">
+                  <a href="#" class="btn btn-default btn-flat">退出</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="dist/img/camera.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>北京师范大学站点</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> 运行正常</a>
+        </div>
+      </div>
+
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">导航</li>
+        <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-fw fa-wikipedia-w"></i>
+             <span>介绍</span>
+              <i class="fa fa-angle-left pull-right"></i>
+          </a>  
+          </a>
+          <ul class="treeview-menu">
+            <li ><a href="index.html"><i class="fa fa-circle-o"></i> 
+            系统介绍</a></li>
+            <li class="active"><a href="detail.html"><i class="fa fa-circle-o"></i> 装置简介</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>功能</span><i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="now.html"><i class="fa fa-circle-o"></i> 实时概况</a></li>
+            <li><a href="stat.html"><i class="fa fa-circle-o"></i> 数据统计</a></li>
+          </ul>
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-pie-chart"></i>
+            <span>数据</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="videoview.html"><i class="fa fa-circle-o"></i> 按日期查询</a></li>
+            <li><a href="file/"><i class="fa fa-circle-o"></i> 天文目录</a></li>
+          </ul>
+        </li>
+        
+        <li class="header">更多</li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>关于我们</span></a></li>
+      </ul>
+    </section>
+  </aside>
+  <div class="content-wrapper">
+  <!-- 内容导航信息 -->
+    <section class="content-header">
+      <h1>
+        装置简介
+        <small>Device Intro</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 简介</a></li>
+      </ol>
+    </section>
+    <section class="content">
+        <h2>流星观测</h2>
+  <p>对流星的研究有着很长的历史。由于流星是持续时间很短的暂现现象，在过去的几十年，缺少合适的探测器的情况下，流星观测一直以肉眼观测为主。国际流星组织（IMO）拟定了一套标准观测流程向全世界的天文爱好者推广，使得他们可以提交有科研价值的观测报告，曾是流星雨的研究重要资料来源。<br>
+  随着科学技术的发展，观测流行的手段逐渐增多。早在照相底片时代，就有许多拍摄流星的尝试。在拍摄流星的相机上加装特殊的旋转快门，就可以在进行长曝光的同时得到流星的速度信息。使用物端棱镜，也可以获得流星的光谱以供研究。<br>
+  由于流星在高层大气中留下的余迹可以反射无线电波，人们发展了雷达观测流星的方法。专业的流星雷达可以探测到远超肉眼可见数目的流星，同时在白天也可以观测。使用这种方式确定了许多在白天活动的流星群。<br>
+  而近十几年，视频拍摄流星的方法逐渐流行起来。CCD的性能终于开始接近人眼，使用专门的低照度相机已经可以得到与肉眼相近的极限星等，并且可以以25帧每秒的速度进行拍摄。流星的视频可以承载最多的信息量。同时，这样的观测装置对于爱好者来说也非常容易搭建。日本和美国都有相当庞大的流星监测网。
+  </p>
+  <h2>装置</h2>
+  <p>本装置主要原理是以高灵敏度的CCD摄像头拍摄天空的动态视频，使用UFOCapture软件捕捉暂现现象，并自动将视频和图片存储下来。然后利用成套的软件对视频进行分析，甄别出流星，并可以自动得出群的归属。多站观测还可以对流星体进行定轨。<br>
+  这套系统的核心在于高灵敏度的CCD相机。在流星监测中，需要极低照度的相机，也就是说相机必须足够灵敏，同时不能有过多的噪点。一款常用的相机是日本Watec的902H相机。目前这款相机已经停产，只能买到二手设备。不过升级版902H Ultimate仍在生产，但是价格比较昂贵。目前国内已经有相似的产品，经测试与旧版的902H性能相近，适合进行流星观测。<br>
+  软件方面，本系统采用的是UFOCapture软件套装，其中包括三个软件，只能运行在windows上，分别用于流星的拍摄、分析和定轨。由于采用触发的方式，观测过程中产生的数据量较小，但有可能漏掉一些比较暗的流星。美国的流星监测网采用的是不同的方式。软件会记录所有拍摄到的数据，这样产生的数据量较大，后期处理比较麻烦。</p>
+  <p> 整套系统进行搭建时就十分注重自动化运行的功能。初期为了方便进行移动和安装，我选择小型的电脑棒驱动摄像头，并将电脑棒与摄像头一起放在监控防水壳里。这样只需要电源和无线网，流可以进行观测了。但同时，由于电脑棒存储较小，我又在室内安装了一个树莓派挂载移动硬盘作为数据服务器。<br>
+  我获得天文系老师的允许将我的设备安装在教九楼顶进行长时间观测。</p>
+  <img src="pic/previousStructure.png">
+  <p>这样整个系统比较复杂，但是传输使用WiFi信号，链接较为不稳定。同时文件难以做到实时同步。实际上大部分的数据处理都在电脑棒上进行，树莓派的作用较为有限。于是在设备安装一个月之后我进行了改装，将电脑棒移到室内，使用BNC线传输模拟信号进入室内。</p>
+  <img src="pic/afterStructure.png">
+  <p>系统简化了许多。但是由于需要长距离传输模拟信号，可能引入额外的干扰。<br>
+  同时，装置在运行时还遇到许多其他的问题。摄像头拍摄时会大量发热，而温度高时画面中会出现许多坏点，影响观测。于是我加装了两根热管用于将摄像头产生的热传递到铝壳上进行散热。另外，防水壳的密封性也要着重考虑。使用密封胶密封所有的缝隙，同时在铝壳内放置干燥剂防止结露。</p>
+  <img src="pic/heat.jpg">
+  <img src="pic/water.jpg">
+  <h2>观测结果</h2>
+  <p>由于夏季北京天气非常差，自设备正式安装以来只探测到一颗流星。但是在之前的测试中，在极好的天气情况下，摄像头可以在一晚上探测到5-10颗流星。</p>
+  <img src="pic/meteor1.gif">
+  <p>从视频何以看出，摄像头可以拍摄到大量的恒星，极限星等约为3.5等，对红色的恒星更为敏感。期待北京天气转好，设备正常运行时，可以拍摄到更多的流星。<br>
+  使用UFOAnalyzer分析得到的视频，使用恒星与星图对齐进行校准，软件就能得到流星的位置、方向、角速度等信息。最后的结果形成一个表格供存储和进一步分析之用。</p>
+  <img src="pic/table.png">
+    </section>
+  </div>
+    <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+    <strong>Copyright © 2015-2016 <a href="http://meteor.bnuastro.club/">北师天文社</a>.</strong> All rights
+    reserved.
+  </footer>
 </body>
+
+</html>
